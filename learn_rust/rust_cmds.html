@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Brief Notes on Rust Programming</title>
+<!-- 2018-04-22 Sun 21:31 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Brief Notes on Rust Programming</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Variables</a></li>
+<li><a href="#sec-2">2. Data Types</a></li>
+<li><a href="#sec-3">3. Functions</a></li>
+<li><a href="#sec-4">4. Control Flows</a></li>
+<li><a href="#sec-5">5. Ownership</a></li>
+<li><a href="#sec-6">6. References and Borrowing</a></li>
+<li><a href="#sec-7">7. Slice data-type</a></li>
+<li><a href="#sec-8">8. Struc</a></li>
+<li><a href="#sec-9">9. Matches</a></li>
+<li><a href="#sec-10">10. if let</a></li>
+<li><a href="#sec-11">11. Modules</a></li>
+<li><a href="#sec-12">12. Use</a></li>
+<li><a href="#sec-13">13. Collections</a></li>
+</ul>
+</div>
+</div>
+<p>
+written while reading  <a href="https://doc.rust-lang.org/book/second-edition/index.html">The Rust Programming Language</a>  - <i>R3DDY97</i>
+</p>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Variables</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>let:- assigns variable 
+</li>
+
+<li>mut:- makes variable mutable
+</li>
+
+<li>const:- assigned varialbe is constant lifetime
+</li>
+</ul>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Data Types</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Scalar  - represents single value</h3>
+<div class="outline-text-3" id="text-2-1">
+<ol class="org-ol">
+<li>Integer
+<p>
+<i>Interger types</i>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Length</th>
+<th scope="col" class="left">signed</th>
+<th scope="col" class="left">Unsigned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">8-bit</td>
+<td class="left">i8</td>
+<td class="left">u8</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">16-bit</td>
+<td class="left">i16</td>
+<td class="left">u16</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">32-bit</td>
+<td class="left">i32</td>
+<td class="left">u32</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">64-bit</td>
+<td class="left">i64</td>
+<td class="left">u64</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">arch</td>
+<td class="left">isize</td>
+<td class="left">usize</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+<i>Examples of Integer types</i>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Number literals</th>
+<th scope="col" class="left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">Decimal</td>
+<td class="left">9822</td>
+</tr>
+
+<tr>
+<td class="left">Hex</td>
+<td class="left">0xff</td>
+</tr>
+
+<tr>
+<td class="left">Octal</td>
+<td class="left">0o77</td>
+</tr>
+
+<tr>
+<td class="left">Binary</td>
+<td class="left">0b1111000</td>
+</tr>
+
+<tr>
+<td class="left">Byte (u8 only)</td>
+<td class="left">b'A'</td>
+</tr>
+</tbody>
+</table>
+</li>
+
+<li>Floating
+
+<ul class="org-ul">
+<li>f32 &#x2013; single precision 
+</li>
+
+<li>f64 &#x2013; double precision (default)
+</li>
+</ul>
+</li>
+
+<li>Boolean
+
+<ul class="org-ul">
+<li>bool
+
+<ul class="org-ul">
+<li>false
+</li>
+
+<li>true
+</li>
+</ul>
+</li>
+</ul>
+</li>
+
+<li>Character
+
+<ul class="org-ul">
+<li>char
+
+<ul class="org-ul">
+<li>should be in SINGLE quote and Strings will be in Double Quotes
+</li>
+
+<li>Unicode scalar values ranging from U+0000 to U+D7FF  and U+E000 to U+10FFFF
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Compound</h3>
+<div class="outline-text-3" id="text-2-2">
+<ol class="org-ol">
+<li>Tuples(tup) 
+
+<ul class="org-ul">
+<li>Holds multiple elements of DIFFERENT data types
+</li>
+
+<li>Destructure
+</li>
+
+<li>'.'
+
+<div class="org-src-container">
+
+<pre class="src src-rust">let num_tup: (u32, f64, i8) = (24, 54.34, 5)
+ num_tup.0 = 24
+ let (x, y, z) = num_tup
+</pre>
+</div>
+</li>
+</ul>
+</li>
+
+<li>Arrays(array) 
+
+<ul class="org-ul">
+<li>Holds elements of SAME data type
+</li>
+
+<li>FIXED length once declared
+
+<div class="org-src-container">
+
+<pre class="src src-rust">let num_array = [9, 8, 7, 6, 5]
+num_array~[0]~ = 9
+num_array~[1]~ = 8
+</pre>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Functions</h2>
+<div class="outline-text-2" id="text-3">
+<ol class="org-ol">
+<li><i>fn</i> keyword defines function
+</li>
+
+<li>ONE MAIN function per program
+</li>
+
+<li>parmeters data-type show be annotated 
+</li>
+
+<li>Statements are instructions that perform some action and do not return a value. 
+</li>
+
+<li>Expressions evaluate to a resulting value and no ending semicolons
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Control Flows</h2>
+<div class="outline-text-2" id="text-4">
+<ol class="org-ol">
+<li>if Expressions
+
+<ol class="org-ol">
+<li>if condition { block of statements and expression}
+</li>
+
+<li>can use <i>if</i> as expression in assigning value to variable
+</li>
+
+<li>if and else return block expression should be of same data-type
+</li>
+</ol>
+</li>
+
+<li>loops -&gt;  need to use break to stop infinte loops
+</li>
+
+<li>while &#x2013;  similar
+</li>
+
+<li>for &#x2013;  similar
+</li>
+</ol>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Ownership</h2>
+<div class="outline-text-2" id="text-5">
+<ol class="org-ol">
+<li>To handle stack and heap properly
+</li>
+
+<li>It manages heap and efficient use of memory to prevent overflow n ran out of space
+</li>
+
+<li>No Need for Garbage Collector
+</li>
+
+<li>Using drop method, it returns memory to OS like Resource Acquisition Is Initialization (RAII) in C++
+</li>
+
+<li>Variable scopes
+</li>
+
+<li>"String" Data-type &#x2013; Stored in Heap
+
+<ul class="org-ul">
+<li>They are mutable 
+</li>
+
+<li>string literals can be converted to String - String::from(string<sub>literal</sub>)
+</li>
+</ul>
+</li>
+
+<li>terms and concepts
+<ol class="org-ol">
+<li><i>clone</i>
+</li>
+<li><i>move</i>
+</li>
+<li><i>Drop</i>
+</li>
+<li><i>Copy</i>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> References and Borrowing</h2>
+<div class="outline-text-2" id="text-6">
+<ol class="org-ol">
+<li><i>&amp;</i> - denotes references
+</li>
+
+<li>It  refers to some value without taking ownership of it
+</li>
+
+<li><i>borrowing</i> is having references as function parameters
+</li>
+
+<li>reference variables are immutables by default 
+</li>
+
+<li>can make reference variable mutable by using <code>&amp;mut</code> for mutable variable
+but can only use that variable <code>once</code> for reference -&gt; to prevent  <i>data race</i>
+and cant use both mutable and normal reference simultaneously in same scope
+</li>
+
+<li>Can make mutiple mutable references if those are in different scopes or code blocks({&#x2026;&#x2026;})
+</li>
+
+<li>NO Dangling references
+</li>
+
+<li>either (but not both of) one mutable reference or any number of immutable references.
+</li>
+
+<li>References must always be valid.
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Slice data-type</h2>
+<div class="outline-text-2" id="text-7">
+<ol class="org-ol">
+<li>denoted as <code>&amp;str</code>  for string slices
+</li>
+
+<li>There can be slices for arrays too.
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Struc</h2>
+<div class="outline-text-2" id="text-8">
+<ol class="org-ol">
+<li>Structs let you create custom types that are meaningful
+</li>
+
+<li>syntax     <code>struct struct_name {fields as k:v}</code>
+</li>
+
+<li>field init shorthand
+</li>
+
+<li>struct update syntax
+</li>
+
+<li>tuple structs
+</li>
+
+<li>unit-like structs
+</li>
+
+<li>derive <code>#[derive(Debug)]</code>
+</li>
+
+<li>can create methods to enums
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> Matches</h2>
+<div class="outline-text-2" id="text-9">
+<ol class="org-ol">
+<li>exhaustive
+</li>
+
+<li>we must exhaust every last possibility in order for the code to be valid
+</li>
+
+<li>Especially in the case of Option&lt;T&gt;, when Rust prevents us from forgetting to explicitly handle the None case
+</li>
+
+<li>it protects us from assuming that we have a value when we might have null -&gt; billion-dollar mistake.
+</li>
+
+<li>_ place holder -&gt; to simplyfy to exclude remaining possibilities
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> if let</h2>
+<div class="outline-text-2" id="text-10">
+<ol class="org-ol">
+<li>syntax sugar for a <i>match</i> that runs code when the value matches one pattern and then ignores all other values.
+</li>
+
+<li>can use <i>else</i> after <i>if let</i>
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> Modules</h2>
+<div class="outline-text-2" id="text-11">
+<ul class="org-ul">
+<li>Its a <i>namespace</i> that contains definitions of functions or types
+</li>
+
+<li>Can choose whether those definitions are visible outside their module (public) or not (private)
+</li>
+
+<li><i>mod</i> keyword declares a new module
+</li>
+
+<li><i>use</i> keyword brings modules, or the definitions inside modules, into scope to easily refer to them
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Use</h2>
+<div class="outline-text-2" id="text-12">
+<ul class="org-ul">
+<li><i>use</i> keyword shortens lengthy function calls by bringing the modules of the function you want to call into scope
+</li>
+
+<li>will work for <i>enums</i> also
+</li>
+
+<li>glob operator -&gt; '*'
+</li>
+
+<li><i>super</i>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> Collections</h2>
+<div class="outline-text-2" id="text-13">
+</div><div id="outline-container-sec-13-1" class="outline-3">
+<h3 id="sec-13-1"><span class="section-number-3">13.1</span> vector</h3>
+<div class="outline-text-3" id="text-13-1">
+<ol class="org-ol">
+<li>Vec&lt;T&gt;
+</li>
+
+<li>syntax   <code>let v: Vec&lt;i32&gt; = Vec::new();</code>
+</li>
+
+<li>Its stored in heaps
+</li>
+
+<li>simple way    <code>let v = vec![1, 2, 3];</code>
+</li>
+
+<li><i>push</i> adds new elements in mutable vector  and <i>pop</i> removes last element 
+</li>
+
+<li>Dropping a Vector Drops Its Elements
+<ul class="org-ul">
+<li>When vector is out of scope, it will be dropped and memory is freed
+
+<div class="org-src-container">
+
+<pre class="src src-rust">#![allow(unused_variables)]
+fn main() {
+{
+    let v = vec![1, 2, 3, 4];
+
+    // do stuff with v
+
+} // &lt;- v goes out of scope and is freed here
+}
+</pre>
+</div>
+</li>
+</ul>
+</li>
+
+<li><i>get</i> is used to access element or vector[n] 
+
+<div class="org-src-container">
+
+<pre class="src src-rust">#![allow(unused_variables)]
+fn main() {
+let v = vec![1, 2, 3, 4, 5];
+
+let third: &amp;i32 = &amp;v[2];
+let third: Option&lt;&amp;i32&gt; = v.get(2);
+}
+</pre>
+</div>
+</li>
+
+<li>can’t have mutable and immutable references in the same scope
+Having immutable reference to  a vector element and adding an element to the end, won’t work
+</li>
+
+<li><i>dereference operator (*)</i>
+</li>
+
+<li><i>enum</i> can be used to store values of different types in one vector
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-2" class="outline-3">
+<h3 id="sec-13-2"><span class="section-number-3">13.2</span> String</h3>
+<div class="outline-text-3" id="text-13-2">
+<ol class="org-ol">
+<li>Growable, mutable, owned, UTF-8 encoded string type.
+When Rustaceans refer to “strings” in Rust, 
+they usually mean the String and the string slice &amp;str types, not just one of those types
+</li>
+
+<li>Most of syntax similar to vector
+
+<p>
+<code>let mut s = String::new();</code>
+</p>
+</li>
+
+<li><code>to_string()</code>  or <code>String::from()</code>
+
+<p>
+<code>let data = "initial contents";</code>
+</p>
+
+<p>
+<code>let s = data.to_string();</code>
+</p>
+</li>
+
+<li><i>Updating a String</i>
+
+<ol class="org-ol">
+<li><code>push_str</code> :- appends a string slice to a String
+</li>
+
+<li><i>push</i> :- adds one character to a String
+</li>
+
+<li><i>+</i> adds reference string to a string 
+and uses <i>deref coercion</i> 
+
+<p>
+<code>let s3 = s1 + &amp;s2;</code>
+</p>
+</li>
+
+<li>format!
+The format! macro works in the same way as println!.
+Instead of printing the output to the screen, it returns a String with the contents
+
+<p>
+<code>let s = format!("{}-{}-{}", s1, s2, s3);</code>
+</p>
+</li>
+
+<li>Indexing is complicated coz of Unicode way of storing in memory
+</li>
+
+<li>Iterate using .chars() or .bytes() methods
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+
+<div id="outline-container-sec-13-3" class="outline-3">
+<h3 id="sec-13-3"><span class="section-number-3">13.3</span> Hash maps</h3>
+<div class="outline-text-3" id="text-13-3">
+<ol class="org-ol">
+<li>HashMap&lt;K, V&gt;
+</li>
+
+<li>stores a mapping of keys of type <i>K</i> to values of type <i>V</i>. 
+</li>
+
+<li>It does this via a <i>hashing function</i>
+
+<div class="org-src-container">
+
+<pre class="src src-rust">#![allow(unused_variables)]
+fn main() {
+use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Yellow"), 50);
+}
+</pre>
+</div>
+</li>
+
+<li>Of our three common collections, this one is the least often used and 
+so it’s not included in the features brought into scope automatically in the prelude. 
+Hash maps also have less support from the standard library; there’s no built-in macro to construct them
+
+<div class="org-src-container">
+
+<pre class="src src-rust">#![allow(unused_variables)]
+fn main() {
+use std::collections::HashMap;
+
+let teams  = vec![String::from("Blue"), String::from("Yellow")];
+let initial_scores = vec![10, 50];
+
+let scores: HashMap&lt;_, _&gt; = teams.iter().zip(initial_scores.iter()).collect();
+}
+</pre>
+</div>
+</li>
+
+<li>we can access Values in a Hash Map by providing its key to the <i>get</i> method
+</li>
+
+<li>Updating Hashmap
+
+<ul class="org-ul">
+<li>Overwriting a Value
+
+<div class="org-src-container">
+
+<pre class="src src-rust">#![allow(unused_variables)]
+fn main() {
+use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Blue"), 25);
+
+println!("{:?}", scores);
+}
+</pre>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+
+
+<ul class="org-ul">
+<li>Only Inserting a Value If the Key Has No Value
+
+<div class="org-src-container">
+
+<pre class="src src-rust">#![allow(unused_variables)]
+fn main() {
+use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+scores.insert(String::from("Blue"), 10);
+
+scores.entry(String::from("Yellow")).or_insert(50);
+scores.entry(String::from("Blue")).or_insert(50);
+
+println!("{:?}", scores);
+}
+</pre>
+</div>
+</li>
+
+<li>Updating a Value Based on the Old Value
+
+<div class="org-src-container">
+
+<pre class="src src-rust">#![allow(unused_variables)]
+fn main() {
+use std::collections::HashMap;
+
+let text = "hello world wonderful world";
+
+let mut map = HashMap::new();
+
+for word in text.split_whitespace() {
+    let count = map.entry(word).or_insert(0);
+    *count += 1;
+}
+
+println!("{:?}", map);
+}
+</pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2018-04-22 Sun 21:31</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

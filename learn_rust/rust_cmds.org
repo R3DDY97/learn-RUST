@@ -1,0 +1,448 @@
+#+TITLE:  Brief Notes on Rust Programming 
+written while reading  [[https://doc.rust-lang.org/book/second-edition/index.html][The Rust Programming Language]]  - /R3DDY97/
+#+STARTUP: indent
+#+OPTIONS: toc:1
+
+
+* Variables
+
+  + let:- assigns variable 
+
+  + mut:- makes variable mutable
+
+  + const:- assigned varialbe is constant lifetime
+
+
+
+* Data Types
+
+** Scalar  - represents single value
+
+     1. Integer
+         	#+NAME:  Integer types
+	     [[Interger types]]
+	  
+             | Length | signed | Unsigned |
+             |--------+--------+----------|
+             | 8-bit  | i8     | u8       |
+             |        |        |          |
+             | 16-bit | i16    | u16      |
+             |        |        |          |
+             | 32-bit | i32    | u32      |
+             |        |        |          |
+             | 64-bit | i64    | u64      |
+             |        |        |          |
+             | arch   | isize  | usize    |
+             |        |        |          |
+	
+         	#+NAME:  Examples of Integer types:-
+	      [[Examples of Integer types]]
+
+             | Number literals | Example   |
+             |-----------------+-----------|
+             | Decimal         | 9822      |
+             | Hex             | 0xff      |
+             | Octal           | 0o77      |
+             | Binary          | 0b1111000 |
+             | Byte (u8 only)  | b'A'      |
+	 
+     2. Floating
+
+	* f32 -- single precision 
+
+	* f64 -- double precision (default)
+	  
+     3. Boolean
+
+	- bool
+
+	  * false
+
+	  * true
+
+     4. Character
+
+	- char
+
+	  + should be in SINGLE quote and Strings will be in Double Quotes
+
+	  + Unicode scalar values ranging from U+0000 to U+D7FF  and U+E000 to U+10FFFF
+	    	    
+
+** Compound
+     
+     1) Tuples(tup) 
+
+	* Holds multiple elements of DIFFERENT data types
+
+	* Destructure
+
+	* '.'
+
+	 #+BEGIN_SRC rust
+         let num_tup: (u32, f64, i8) = (24, 54.34, 5)
+	  num_tup.0 = 24
+	  let (x, y, z) = num_tup
+	#+END_SRC
+	 
+     2) Arrays(array) 
+
+	* Holds elements of SAME data type
+
+	* FIXED length once declared
+
+	 #+BEGIN_SRC rust
+         let num_array = [9, 8, 7, 6, 5]
+         num_array~[0]~ = 9
+	 num_array~[1]~ = 8
+	 #+END_SRC
+
+
+* Functions
+   
+   1. /fn/ keyword defines function
+
+   2. ONE MAIN function per program
+
+   3. parmeters data-type show be annotated 
+
+   4. Statements are instructions that perform some action and do not return a value. 
+
+   5. Expressions evaluate to a resulting value and no ending semicolons
+      
+
+* Control Flows
+
+   1) if Expressions
+
+      1. if condition { block of statements and expression}
+
+      2. can use /if/ as expression in assigning value to variable
+
+      3. if and else return block expression should be of same data-type
+   
+   2) loops ->  need to use break to stop infinte loops
+
+   3) while --  similar
+
+   4) for --  similar
+
+
+
+* Ownership
+
+   1) To handle stack and heap properly
+
+   2) It manages heap and efficient use of memory to prevent overflow n ran out of space
+
+   3) No Need for Garbage Collector
+
+   4) Using drop method, it returns memory to OS like Resource Acquisition Is Initialization (RAII) in C++
+
+   5) Variable scopes
+
+   6) "String" Data-type -- Stored in Heap
+
+      * They are mutable 
+
+      * string literals can be converted to String - String::from(string_literal)
+
+   7) terms and concepts
+      1. /clone/
+      2. /move/
+      3. /Drop/
+      4. /Copy/
+ 
+	 
+* References and Borrowing
+
+   1) /&/ - denotes references
+
+   2) It  refers to some value without taking ownership of it
+
+   3) /borrowing/ is having references as function parameters
+
+   4) reference variables are immutables by default 
+
+   5) can make reference variable mutable by using ~&mut~ for mutable variable
+      but can only use that variable ~once~ for reference -> to prevent  /data race/
+      and cant use both mutable and normal reference simultaneously in same scope
+
+   6) Can make mutiple mutable references if those are in different scopes or code blocks({......})
+
+   7) NO Dangling references
+
+   8) either (but not both of) one mutable reference or any number of immutable references.
+
+   9) References must always be valid.
+
+
+* Slice data-type
+   
+   1) denoted as ~&str~  for string slices
+
+   2) There can be slices for arrays too.
+
+
+* Struc
+
+   1) Structs let you create custom types that are meaningful
+
+   2) syntax     ~struct struct_name {fields as k:v}~
+
+   3) field init shorthand
+
+   4) struct update syntax
+
+   5) tuple structs
+
+   6) unit-like structs
+
+   7) derive ~#[derive(Debug)]~
+
+   5) can create methods to enums
+      
+
+* Matches
+
+     1) exhaustive
+
+     2) we must exhaust every last possibility in order for the code to be valid
+
+     3) Especially in the case of Option<T>, when Rust prevents us from forgetting to explicitly handle the None case
+
+     4) it protects us from assuming that we have a value when we might have null -> billion-dollar mistake.
+     
+     5) _ place holder -> to simplyfy to exclude remaining possibilities
+
+
+* if let
+
+   1) syntax sugar for a /match/ that runs code when the value matches one pattern and then ignores all other values.
+
+   2) can use /else/ after /if let/
+
+
+* Modules
+
+   + Its a /namespace/ that contains definitions of functions or types
+
+   + Can choose whether those definitions are visible outside their module (public) or not (private)
+
+   + /mod/ keyword declares a new module
+
+   + /use/ keyword brings modules, or the definitions inside modules, into scope to easily refer to them
+
+
+* Use 
+
+   + /use/ keyword shortens lengthy function calls by bringing the modules of the function you want to call into scope
+
+   + will work for /enums/ also
+
+   + glob operator -> '*'
+
+   + /super/
+
+
+* Collections
+
+** vector
+
+    1) Vec<T>
+
+    2) syntax   ~let v: Vec<i32> = Vec::new();~
+
+    3) Its stored in heaps
+
+    4) simple way    ~let v = vec![1, 2, 3];~
+
+    5) /push/ adds new elements in mutable vector  and /pop/ removes last element 
+
+    6) Dropping a Vector Drops Its Elements
+       - When vector is out of scope, it will be dropped and memory is freed
+
+	  #+BEGIN_SRC rust
+	  #![allow(unused_variables)]
+	  fn main() {
+	  {
+	      let v = vec![1, 2, 3, 4];
+
+	      // do stuff with v
+
+	  } // <- v goes out of scope and is freed here
+	  }
+	 #+END_SRC
+
+    7) /get/ is used to access element or vector[n] 
+
+       #+BEGIN_SRC rust 
+       #![allow(unused_variables)]
+       fn main() {
+       let v = vec![1, 2, 3, 4, 5];
+
+       let third: &i32 = &v[2];
+       let third: Option<&i32> = v.get(2);
+       }
+       #+END_SRC
+    
+    8) can’t have mutable and immutable references in the same scope
+       Having immutable reference to  a vector element and adding an element to the end, won’t work
+
+    9) /dereference operator (*)/
+    
+    10) /enum/ can be used to store values of different types in one vector
+
+
+** String
+
+    1) Growable, mutable, owned, UTF-8 encoded string type.
+       When Rustaceans refer to “strings” in Rust, 
+       they usually mean the String and the string slice &str types, not just one of those types
+
+    2) Most of syntax similar to vector
+
+       ~let mut s = String::new();~
+     
+    3) ~to_string()~  or ~String::from()~
+    
+       ~let data = "initial contents";~
+
+       ~let s = data.to_string();~
+          
+    4) /Updating a String/
+
+       1. ~push_str~ :- appends a string slice to a String
+
+       2. /push/ :- adds one character to a String
+
+       3. /+/ adds reference string to a string 
+          and uses /deref coercion/ 
+
+	  ~let s3 = s1 + &s2;~
+	
+       4. format!
+          The format! macro works in the same way as println!.
+          Instead of printing the output to the screen, it returns a String with the contents
+
+          ~let s = format!("{}-{}-{}", s1, s2, s3);~
+
+       5. Indexing is complicated coz of Unicode way of storing in memory
+     
+       6. Iterate using .chars() or .bytes() methods
+      
+
+** Hash maps
+
+   1) HashMap<K, V>
+
+   2) stores a mapping of keys of type /K/ to values of type /V/. 
+
+   3) It does this via a /hashing function/
+
+       #+BEGIN_SRC rust
+
+       #![allow(unused_variables)]
+       fn main() {
+       use std::collections::HashMap;
+
+       let mut scores = HashMap::new();
+
+       scores.insert(String::from("Blue"), 10);
+       scores.insert(String::from("Yellow"), 50);
+       }
+
+       #+END_SRC
+
+   4) Of our three common collections, this one is the least often used and 
+      so it’s not included in the features brought into scope automatically in the prelude. 
+      Hash maps also have less support from the standard library; there’s no built-in macro to construct them
+
+	#+BEGIN_SRC rust
+
+	#![allow(unused_variables)]
+	fn main() {
+	use std::collections::HashMap;
+
+	let teams  = vec![String::from("Blue"), String::from("Yellow")];
+	let initial_scores = vec![10, 50];
+
+	let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+	}      
+
+	#+END_SRC
+
+   5) we can access Values in a Hash Map by providing its key to the /get/ method
+
+   6) Updating Hashmap
+ 
+      + Overwriting a Value
+
+	#+BEGIN_SRC rust
+
+	#![allow(unused_variables)]
+	fn main() {
+	use std::collections::HashMap;
+
+	let mut scores = HashMap::new();
+
+	scores.insert(String::from("Blue"), 10);
+	scores.insert(String::from("Blue"), 25);
+
+	println!("{:?}", scores);
+	}
+
+	#+END_SRC
+   
+   
+      + Only Inserting a Value If the Key Has No Value
+	
+        #+BEGIN_SRC rust
+	
+	#![allow(unused_variables)]
+	fn main() {
+	use std::collections::HashMap;
+
+	let mut scores = HashMap::new();
+	scores.insert(String::from("Blue"), 10);
+
+	scores.entry(String::from("Yellow")).or_insert(50);
+	scores.entry(String::from("Blue")).or_insert(50);
+
+	println!("{:?}", scores);
+	}
+
+	#+END_SRC
+      
+      + Updating a Value Based on the Old Value
+	
+	#+BEGIN_SRC rust
+
+	#![allow(unused_variables)]
+	fn main() {
+	use std::collections::HashMap;
+
+	let text = "hello world wonderful world";
+
+	let mut map = HashMap::new();
+
+	for word in text.split_whitespace() {
+	    let count = map.entry(word).or_insert(0);
+	    *count += 1;
+	}
+
+	println!("{:?}", map);
+	}
+
+	#+END_SRC
+
+	
+
+
+* Error Handling
+  
+
+
+
+
+

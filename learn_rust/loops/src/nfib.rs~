@@ -1,0 +1,13 @@
+
+use std::io;
+
+fn main(){
+    fib_N();
+}
+
+
+fn fib_N() {
+
+    let mut n = String::new();
+    
+}
